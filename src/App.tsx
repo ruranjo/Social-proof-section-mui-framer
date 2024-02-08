@@ -182,5 +182,3 @@ const App: React.FC<{}> = () => {
 }
 
 export default App
-
-//<Ratelabel rate={rateAux.rate as RangeNumber} retedBy={rateAux.orientedBy} endPositionEffect={separateX*(1-index)} key={index}/>
