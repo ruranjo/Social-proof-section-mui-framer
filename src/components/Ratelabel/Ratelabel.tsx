@@ -31,7 +31,7 @@ const RatelabelStyle: styledRatelabel = {
       width:'100%',
       
       '@media screen and (max-width: 1000px)': {
-        width:'80%',
+       
       },
   },
   ratingBox :{

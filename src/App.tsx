@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import { CardVerified, Ratelabel } from './components';
 import { rateData, verifiedBuyersData } from './utils/data';
 import { RangeNumber } from './components/Ratelabel/Ratelabel';
+import { useEffect, useState } from 'react';
 
 export interface styledApp {
   containerStyle: SxProps;
@@ -26,7 +27,7 @@ const appStyle: styledApp = {
       width:'100%',
       height:'100vh',
       '@media screen and (max-width: 1000px)': {
-        
+        height:'auto',
       },
     },
     landingContentMain:{
@@ -35,6 +36,7 @@ const appStyle: styledApp = {
       height:'90%',
       '@media screen and (max-width: 1000px)': {
         width:'100%',
+        height:'100%',
       },
     },
     landingContentTop:{
@@ -46,6 +48,9 @@ const appStyle: styledApp = {
         flexDirection:'column',
         justifyContent:'center',
         alignItems:'center',
+        
+        marginBottom:'2rem',
+        height:'auto',
       },
     },
     mainInformationText:{
@@ -54,7 +59,9 @@ const appStyle: styledApp = {
       height:'100%',
       '@media screen and (max-width: 1000px)': {
         display:'flex',
-        alignItems:'center'
+        justifyContent:'center',
+        alignItems:'center',
+        width:'90%',
       },
     },
     title:{
@@ -72,6 +79,11 @@ const appStyle: styledApp = {
       fontFamily: fontFamily,
       maxWidth:'450px',
       color: darkGrayishMagenta,
+      '@media screen and (max-width: 1000px)': {
+        marginTop:'2rem',
+        marginBottom:'2rem',
+      },
+      
     },
     rateContainer:{
       //border:'1px solid green',
@@ -92,14 +104,35 @@ const appStyle: styledApp = {
       justifyContent:'space-between',
       alignItems:'center',
       width:'100%',
-      height:'50%'
+      height:'50%',
+      '@media screen and (max-width: 1000px)': {
+        flexDirection:'column'
+      },
     },
     
   }
+ 
+const App: React.FC<{}> = () => {
+  const [separateX, _setSeparateX] = useState<number>(-40);
+  const [separateY, _setSeparateY] = useState<number>(-20);
+  
+  const [anchoPantalla, setAnchoPantalla] = useState<number>(window.innerWidth);
 
-const App = () => {
-  const separateX = -40;
-  const separateY = -20;
+  // Función para actualizar el ancho de la pantalla
+  const actualizarAnchoPantalla = () => {
+    setAnchoPantalla(window.innerWidth);
+  };
+
+  // Efecto para añadir el evento de cambio de tamaño al montar el componente
+  useEffect(() => {
+    window.addEventListener('resize', actualizarAnchoPantalla);
+
+    // Limpiar el evento al desmontar el componente
+    return () => {
+      window.removeEventListener('resize', actualizarAnchoPantalla);
+    };
+  }, []); 
+
   return (
     <Container maxWidth={false}  sx={appStyle.containerStyle}>
       <Box sx={appStyle.landingContentMain}>
@@ -113,6 +146,7 @@ const App = () => {
               >
                 
                     <Typography sx={appStyle.title} variant='h2'>10,000+ of our users love our products.</Typography>
+                  
                     <Typography sx={appStyle.subtitle} variant='subtitle1'>
                       We only provide great products combined with excellent customer service.
                       See what our satisfied customers are saying about our services.
@@ -125,7 +159,7 @@ const App = () => {
               {
                 rateData.map((rateAux, index) => {
                   return (
-                    <Ratelabel rate={rateAux.rate as RangeNumber} retedBy={rateAux.orientedBy} endPositionEffect={separateX*(1-index)} key={index}/>
+                    <Ratelabel rate={rateAux.rate as RangeNumber} retedBy={rateAux.orientedBy} endPositionEffect={anchoPantalla > 1000 ? separateX*(1-index) : 0} key={index}/>
                   )
                 })
               }
@@ -137,7 +171,7 @@ const App = () => {
           {
                 verifiedBuyersData.map((verified, index) => {
                   return (
-                    <CardVerified dataCard={verified} endPositionEffect={separateY*(1-index)}  key={index}/>
+                    <CardVerified dataCard={verified} endPositionEffect={anchoPantalla > 1000 ? separateY*(1-index) : 0}  key={index}/>
                   )
                 })
               }
@@ -148,3 +182,5 @@ const App = () => {
 }
 
 export default App
+
+//<Ratelabel rate={rateAux.rate as RangeNumber} retedBy={rateAux.orientedBy} endPositionEffect={separateX*(1-index)} key={index}/>
